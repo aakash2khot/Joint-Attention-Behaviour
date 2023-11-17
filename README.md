@@ -1,10 +1,6 @@
 
 
 
- <p align="center">
-  <img src="https://github.com/Ahmednull/Storage/blob/main/gaze.gif" alt="animated" />
-</p>
-
 
 ___
 
