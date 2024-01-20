@@ -118,12 +118,12 @@ def gazeAtPerson(gaze, face):
 if __name__ == '__main__':
     args = parse_args()
 
-    # cudnn.enabled = True "GPU"
+    cudnn.enabled = True
     arch=args.arch
     batch_size = 1
     cam = args.cam_id
     video_file = args.fname
-    # gpu = select_device(args.gpu_id, batch_size=batch_size) "GPU"
+    gpu = select_device(args.gpu_id, batch_size=batch_size)
     snapshot_path = args.snapshot
    
     
@@ -141,14 +141,14 @@ if __name__ == '__main__':
     print('Loading snapshot.')
     saved_state_dict = torch.load(snapshot_path, map_location=torch.device('cpu'))
     model.load_state_dict(saved_state_dict)
-    # model.cuda(gpu) "GPU"
+    model.cuda(gpu)
     model.eval()
 
 
     softmax = nn.Softmax(dim=1)
-    detector = RetinaFace(gpu_id=-1)
+    detector = RetinaFace(gpu_id=args.gpu_id)
     idx_tensor = [idx for idx in range(90)]
-    idx_tensor = torch.FloatTensor(idx_tensor)#.cuda(gpu) "GPU"
+    idx_tensor = torch.FloatTensor(idx_tensor).cuda(gpu)
     x=0
   
     cap = cv2.VideoCapture(video_file)
@@ -218,7 +218,7 @@ if __name__ == '__main__':
                     img = cv2.cvtColor(img, cv2.COLOR_BGR2RGB)
                     im_pil = Image.fromarray(img)
                     img=transformations(im_pil)
-                    img  = Variable(img)#.cuda(gpu) "GPU"
+                    # img  = Variable(img)#.cuda(gpu)
                     img  = img.unsqueeze(0) 
                     
                     # gaze prediction
