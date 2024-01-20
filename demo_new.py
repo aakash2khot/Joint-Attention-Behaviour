@@ -218,7 +218,7 @@ if __name__ == '__main__':
                     img = cv2.cvtColor(img, cv2.COLOR_BGR2RGB)
                     im_pil = Image.fromarray(img)
                     img=transformations(im_pil)
-                    # img  = Variable(img)#.cuda(gpu)
+                    img  = Variable(img).cuda(gpu)
                     img  = img.unsqueeze(0) 
                     
                     # gaze prediction
