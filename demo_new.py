@@ -123,7 +123,7 @@ if __name__ == '__main__':
     batch_size = 1
     cam = args.cam_id
     video_file = args.fname
-    gpu = select_device(args.gpu_id, batch_size=batch_size)
+    gpu = select_device(str(args.gpu_id), batch_size=batch_size)
     snapshot_path = args.snapshot
    
     
