@@ -123,9 +123,9 @@ if __name__ == '__main__':
     batch_size = 1
     cam = args.cam_id
     video_file = args.fname
-    gpu = select_device(args.gpu_id, batch_size=batch_size)
+    # gpu = select_device(args.gpu_id, batch_size=batch_size)
     # new change
-    # gpu = select_device(str(args.gpu_id), batch_size=batch_size)
+    gpu = select_device(str(args.gpu_id), batch_size=batch_size)
 
     snapshot_path = args.snapshot
    
@@ -149,6 +149,8 @@ if __name__ == '__main__':
 
 
     softmax = nn.Softmax(dim=1)
+    # detector = RetinaFace(gpu_id=-1)
+    # new change
     detector = RetinaFace(gpu_id=-1)
     idx_tensor = [idx for idx in range(90)]
     idx_tensor = torch.FloatTensor(idx_tensor).cuda(gpu)
