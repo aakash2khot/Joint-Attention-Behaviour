@@ -123,7 +123,10 @@ if __name__ == '__main__':
     batch_size = 1
     cam = args.cam_id
     video_file = args.fname
-    gpu = select_device(str(args.gpu_id), batch_size=batch_size)
+    gpu = select_device(args.gpu_id, batch_size=batch_size)
+    # new change
+    # gpu = select_device(str(args.gpu_id), batch_size=batch_size)
+
     snapshot_path = args.snapshot
    
     
@@ -146,7 +149,7 @@ if __name__ == '__main__':
 
 
     softmax = nn.Softmax(dim=1)
-    detector = RetinaFace(gpu_id=args.gpu_id)
+    detector = RetinaFace(gpu_id=-1)
     idx_tensor = [idx for idx in range(90)]
     idx_tensor = torch.FloatTensor(idx_tensor).cuda(gpu)
     x=0
@@ -180,7 +183,7 @@ if __name__ == '__main__':
         while cap.isOpened():
             success, frame = cap.read()    
             start_fps = time.time()  
-            # frame_count+=1
+            frame_count+=1
 
             if not success:
                 break
@@ -191,6 +194,8 @@ if __name__ == '__main__':
             p=[]
             d=[]
             f=[]
+            if faces is None:
+                print("Faces not detected in frame ", frame_count)
             if faces is not None: 
                 for box, landmarks, score in faces:
                     if score < .95:
@@ -246,9 +251,12 @@ if __name__ == '__main__':
 
                     cv2.rectangle(frame, (x_min, y_min), (x_max, y_max), (0,255,0), 1)
                 t=t+1
-                
-                if t==5 and len(p)>1:
-                    frame_count+=1
+                if len(p)==1:
+                    print("Only 1 face detected in frame ",frame_count)
+                if len(p)==0:
+                    print("No face there in ",frame_count)
+                if len(p)>1:
+                    # frame_count+=1
                     t=0
                     point=score1(p[0],d[0],p[1],d[1])
                     inter.append(point)
