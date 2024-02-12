@@ -175,6 +175,7 @@ if __name__ == '__main__':
         raise IOError("Cannot open file")
     
     frame_count = 0
+    total_frame_count = 0
 
     with torch.no_grad():
         # yolo = YOLOv3("darknet/cfg/yolov3.cfg", "yolov3.weights")
@@ -185,7 +186,7 @@ if __name__ == '__main__':
         while cap.isOpened():
             success, frame = cap.read()    
             start_fps = time.time()  
-            frame_count+=1
+            total_frame_count+=1
 
             if not success:
                 break
@@ -254,11 +255,11 @@ if __name__ == '__main__':
                     cv2.rectangle(frame, (x_min, y_min), (x_max, y_max), (0,255,0), 1)
                 t=t+1
                 if len(p)==1:
-                    print("Only 1 face detected in frame ",frame_count)
+                    print("Only 1 face detected in frame ",total_frame_count)
                 if len(p)==0:
-                    print("No face there in ",frame_count)
+                    print("No face there in ",total_frame_count)
                 if len(p)>1:
-                    # frame_count+=1
+                    frame_count+=1
                     t=0
                     point=score1(p[0],d[0],p[1],d[1])
                     inter.append(point)
@@ -291,6 +292,7 @@ if __name__ == '__main__':
         cap.release()
         cv2.destroyAllWindows()
         # print("The video was successfully saved")
+        print("Frame count: ", total_frame_count)
         print("Frame count: ", frame_count)
         print("JAB score is ", jab_score)
         print("JAB score is (Normalized)", jab_score/frame_count)
